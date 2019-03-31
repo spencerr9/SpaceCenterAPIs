@@ -1,0 +1,30 @@
+{
+  "shift": {
+    "id": 101468024,
+    "user_id": 1112336,
+    "start": "2019-04-08 09:00:00",
+    "end": "2019-04-08 10:00:00",
+    "close": false,
+    "bd": false,
+    "hourly_wage": 0,
+    "department_id": 74580,
+    "location_id": 55212,
+    "role_id": 296565,
+    "notes": "Dir shift",
+    "draft": false,
+    "notified": false,
+    "open": false,
+    "unassigned": false,
+    "unassigned_skill_level": 0,
+    "open_offer_type": 0,
+    "status": 0,
+    "late_minutes": 0,
+    "created": "2019-03-27 01:11:51",
+    "modified": "2019-03-27 01:12:06",
+    "deleted": false,
+    "first_published": "2019-03-27 01:12:06",
+    "last_published": "2019-03-27 01:12:06",
+    "station": 0
+  },
+  "station": []
+}

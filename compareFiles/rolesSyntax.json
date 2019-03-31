@@ -1,0 +1,38 @@
+{
+  "status": "success",
+  "total": 2,
+  "offset": 0,
+  "limit": 250,
+  "data": [
+    {
+      "role": {
+        "id": 296565,
+        "location_id": 55212,
+        "department_id": 74580,
+        "color": "f44336",
+        "stations": 0,
+        "name": "Director",
+        "job_code": "",
+        "created": "2019-03-18 03:14:56",
+        "modified": "2019-03-18 03:14:56",
+        "sort": 0
+      },
+      "station": []
+    },
+    {
+      "role": {
+        "id": 296566,
+        "location_id": 55212,
+        "department_id": 74580,
+        "color": "9c27b0",
+        "stations": 0,
+        "name": "Supervisor",
+        "job_code": "",
+        "created": "2019-03-18 03:14:56",
+        "modified": "2019-03-18 03:14:56",
+        "sort": 0
+      },
+      "station": []
+    }
+  ]
+}
