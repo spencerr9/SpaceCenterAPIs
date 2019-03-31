@@ -77,45 +77,43 @@ function padLeft(num, length){
 function consoleLog(){
   // console.log("APPTS: ", apptData);
   // console.log("SHIFTS: ", shiftData.data);
-  // 2019-04-01 10:00:00
+  let newShiftData = []
+  let leftOverAppts = []
   for(let i=0; i<apptData.length; i++){
     let ADate = new Date(apptData[i].datetime)
+    let shiftExists = false
     for(let j=0; j<shiftData.data.length; j++){
       let SDate = new Date(shiftData.data[j].shift.start)
       // console.log(ADate.valueOf() == SDate.valueOf())
       if(ADate.valueOf() === SDate.valueOf()){
-        shiftData.data.slice(j)
-        console.log(j)
+        shiftExists = true
+        break
       } 
-      // else {
-      //   let shiftBody = { shift: {
-      //     start:[padLeft(ADate.getMonth() + 1, 2),
-      //               padLeft(ADate.getDate(), 2),
-      //               ADate.getFullYear()
-      //           ].join('-') + ' ' + [padLeft(ADate.getHours(), 2),
-      //               padLeft(ADate.getMinutes(), 2),
-      //               padLeft(ADate.getSeconds(), 2)
-      //           ].join(':'),
-      //     end: [padLeft(ADate.getMonth() + 1, 2),
-      //               padLeft(ADate.getDate(), 2),
-      //               ADate.getFullYear()
-      //       // SEE BUG BELOW AT "+ 2"
-      //           ].join('-') + ' ' + [padLeft(ADate.getHours() + 2, 2),
-      //               padLeft(ADate.getMinutes(), 2),
-      //               padLeft(ADate.getSeconds(), 2)
-      //           ].join(':'),
-      //     user_id: 0,
-      //     role_id: 296565,
-      //     location_id: 55212,
-      //     department_id: 74580,
-      //     open: true,
-      //     open_offer_type: 1,
-      //     notes: apptData[i].type
-      //   }}
-      //   createShift(shiftBody)
-      // }
     }
-    // console.log()
+    if(!shiftExists){
+      leftOverAppts.push(apptData[i]) 
+    }
+  }
+  for(let k=0; k<leftOverAppts.length; k++){
+    let endTimeHour = parseInt(leftOverAppts[k].datetime.substr(11,2))+2 >= 24 ? parseInt(leftOverAppts[k].datetime.substr(11,2))+2 - 24: parseInt(leftOverAppts[k].datetime.substr(11,2))+2
+    let startTime = leftOverAppts[k].datetime.replace("T"," ").substr(0, 19)
+    let endTime = startTime.substr(0, 11)+endTimeHour+startTime.substr(13, 6)
+    console.log("END", endTime)
+
+    let newApptBody = {
+      shift: {
+        start: startTime,
+        end: endTime,
+        user_id: 0,
+        role_id: 296565,
+        location_id: 55212,
+        department_id: 74580,
+        open: true,
+        open_offer_type: 1,
+        notes: leftOverAppts.type
+      }
+    }
+    svnShifts.Shifts.create(SVNSHIFTS_API_KEY, newApptBody)
   }
 }
 
