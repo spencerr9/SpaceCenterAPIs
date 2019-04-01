@@ -17,7 +17,10 @@ const {
     PORT,
     ACUITY_USER_ID,
     ACUITY_API_KEY,
-    SVNSHIFTS_API_KEY
+    SVNSHIFTS_API_KEY,
+    LOCATION_ID,
+    ROLE_ID,
+    DEPARTMENT_ID
 } = process.env;
 
 var acuity = Acuity.basic({
@@ -79,38 +82,56 @@ function consoleLog(){
   // console.log("SHIFTS: ", shiftData.data);
   let newShiftData = []
   let leftOverAppts = []
+  let cancelledAppts = []
   for(let i=0; i<apptData.length; i++){
     let ADate = new Date(apptData[i].datetime)
+    if(ADate < new Date()){
+      continue
+    }
     let shiftExists = false
     for(let j=0; j<shiftData.data.length; j++){
       let SDate = new Date(shiftData.data[j].shift.start)
       // console.log(ADate.valueOf() == SDate.valueOf())
       if(ADate.valueOf() === SDate.valueOf()){
         shiftExists = true
+        shiftData.data.splice(j, 1)
         break
       } 
     }
     if(!shiftExists){
       leftOverAppts.push(apptData[i]) 
-    }
+    } 
   }
+  // console.log(shiftData.data)
+  // Deleting shifts for deleted appointments
+  for(let l=0; l<shiftData.data.length; l++){
+    if(new Date(shiftData.data[l].shift.start) < new Date()){
+      continue
+    }
+    let deletedId = shiftData.data[l].shift.id
+    console.log("Shift Deleted: ", shiftData.data[l].shift.start, shiftData.data[l].shift.end)
+    svnShifts.Shifts.delete(SVNSHIFTS_API_KEY, deletedId)
+    // .catch(err => console.log(err))
+  }
+
+  // Creating shifts for new appts.
   for(let k=0; k<leftOverAppts.length; k++){
     let endTimeHour = parseInt(leftOverAppts[k].datetime.substr(11,2))+2 >= 24 ? parseInt(leftOverAppts[k].datetime.substr(11,2))+2 - 24: parseInt(leftOverAppts[k].datetime.substr(11,2))+2
     let startTime = leftOverAppts[k].datetime.replace("T"," ").substr(0, 19)
     let endTime = startTime.substr(0, 11)+endTimeHour+startTime.substr(13, 6)
-    console.log("END", endTime)
+    console.log("New Appt Added: ", startTime, endTime)
 
     let newApptBody = {
       shift: {
         start: startTime,
         end: endTime,
         user_id: 0,
-        role_id: 296565,
-        location_id: 55212,
-        department_id: 74580,
+        role_id: ROLE_ID,
+        location_id: LOCATION_ID,
+        department_id: DEPARTMENT_ID,
         open: true,
         open_offer_type: 1,
-        notes: leftOverAppts.type
+        notes: leftOverAppts[k].type
       }
     }
     svnShifts.Shifts.create(SVNSHIFTS_API_KEY, newApptBody)
