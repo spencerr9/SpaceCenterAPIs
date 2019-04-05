@@ -58,24 +58,19 @@ function sevenShiftsAPI(){
   })
 } 
 
-function createShift(body){
-  svnShifts.Shifts.create(SVNSHIFTS_API_KEY, body)
-  .then(console.log())
-}
+// function createShift(body){
+//   svnShifts.Shifts.create(SVNSHIFTS_API_KEY, body)
+//   .then(console.log())
+// }
 
-function padLeft(num, length){
-  while(num.length < length){
-    num = '0' + num
-  }
-  return num
-}
+// function padLeft(num, length){
+//   while(num.length < length){
+//     num = '0' + num
+//   }
+//   return num
+// }
 
 // console.log(shiftData)
-// create shift - WORKS!
-// You cannot add more than one user_id when the endpoint is hit, which means that a loop must be created to add more than one user per shift on each day.
-// MUST have a user_id (aka employee id) and a department_id (int). role_id (int) = director or supervisor.
-// To create an open shift, it MUST indicate "open" as true and "open_offer_type" as 1
-// curl -X POST -d '{ "shift": { "start": "2019-04-09 10:00:00", "end": "2019-04-09 11:00:00", "user_id": 0, "role_id": 296565, "location_id": 55212, "department_id": 74580, "open": true, "open_offer_type": 1, "notes": "Type of mission" } }' https://api.7shifts.com/v1/shifts \-u 3WX3WZ8BTC8BF49JGF4CSC6XMAKHTE4T:
 
 function consoleLog(){
   // console.log("APPTS: ", apptData);
@@ -91,18 +86,24 @@ function consoleLog(){
     let shiftExists = false
     for(let j=0; j<shiftData.data.length; j++){
       let SDate = new Date(shiftData.data[j].shift.start)
-      // console.log(ADate.valueOf() == SDate.valueOf())
-      if(ADate.valueOf() === SDate.valueOf()){
+      // console.log(ADate.valueOf() == SDate.valueOf(), ADate.valueOf(), SDate.valueOf())
+      if(
+        // ADate.valueOf() === SDate.valueOf()
+        shiftData.data[j].shift.notes.includes(apptData[i].id)
+        ){
+          // console.log(true)
         shiftExists = true
         shiftData.data.splice(j, 1)
-        break
+        // break
       } 
     }
     if(!shiftExists){
+      // console.log(false)
       leftOverAppts.push(apptData[i]) 
     } 
   }
   // console.log(shiftData.data)
+
   // Deleting shifts for deleted appointments
   for(let l=0; l<shiftData.data.length; l++){
     if(new Date(shiftData.data[l].shift.start) < new Date()){
@@ -119,23 +120,100 @@ function consoleLog(){
     let endTimeHour = parseInt(leftOverAppts[k].datetime.substr(11,2))+2 >= 24 ? parseInt(leftOverAppts[k].datetime.substr(11,2))+2 - 24: parseInt(leftOverAppts[k].datetime.substr(11,2))+2
     let startTime = leftOverAppts[k].datetime.replace("T"," ").substr(0, 19)
     let endTime = startTime.substr(0, 11)+endTimeHour+startTime.substr(13, 6)
-    console.log("New Appt Added: ", startTime, endTime)
+    // console.log("New Appt Added: ", startTime, endTime)
 
-    let newApptBody = {
-      shift: {
-        start: startTime,
-        end: endTime,
-        user_id: 0,
-        role_id: ROLE_ID,
-        location_id: LOCATION_ID,
-        department_id: DEPARTMENT_ID,
-        open: true,
-        open_offer_type: 1,
-        notes: leftOverAppts[k].type
-      }
+    let roles = {
+      'Galileo FD': 304018,
+      'Magellan FD': 304014,
+      'Odyssey FD': 304016,
+      'Phoenix FD': 304017,
+      'Supervisor': 304015,
+      'Teacher': 304019
     }
-    svnShifts.Shifts.create(SVNSHIFTS_API_KEY, newApptBody)
-  }
+
+    let roleType = []
+
+    switch (leftOverAppts[k].type) {
+      case 'Day Camp':
+        roleType[0] = roles["Teacher"]
+        console.log("New Day Camp Added: ", startTime, endTime)
+        break;
+      case 'Extended Camp':
+        roleType[0] = roles["Teacher"]
+        console.log("New Extended Camp Added: ", startTime, endTime)
+        break;
+      case 'Officer Camp':
+        roleType[0] = roles["Teacher"]
+        console.log("New Officer Camp Added: ", startTime, endTime)
+        break;
+      case 'Leadership Camp':
+        roleType[0] = roles["Teacher"]
+        console.log("New Leadership Camp Added: ", startTime, endTime)
+        break;
+      case 'Class Field Trip + 2 Simulators (15-25 Students)':
+        roleType[0] = roles["Teacher"]
+        console.log("New Class Field Trip Added: ", startTime, endTime)
+        break;
+      case 'Class Field Trip + 4 Simulators (27-40 Students)':
+        roleType[0] = roles["Teacher"]
+        console.log("New Class Field Trip Added: ", startTime, endTime)
+        break;
+      case 'Magellan 2.5 Hour Flight':
+        roleType[0] = roles["Magellan FD"]
+        roleType[1] = roles["Supervisor"]
+        roleType[2] = roles["Supervisor"]
+        console.log("New Magellan 2.5 Hour Flight Added: ", startTime, endTime)
+        break;
+      case 'Odyssey 2.5 Hour Flight':
+        roleType[0] = roles["Odyssey FD"]
+        console.log("New Odyssey 2.5 Hour Flight Added: ", startTime, endTime)
+        break;
+      case 'Phoenix 2.5 Hour Flight':
+        roleType[0] = roles["Phoenix FD"]
+        console.log("New Phoenix 2.5 Hour Flight Added: ", startTime, endTime)
+        break;
+      case 'Galileo 2.5 Hour Flight':
+        roleType[0] = roles["Galileo FD"]
+        console.log("New Galileo 2.5 Hour Flight Added: ", startTime, endTime)
+        break;
+      case 'Magellan 5 Hour Flight':
+        roleType[0] = roles["Magellan FD"]
+        roleType[1] = roles["Supervisor"]
+        roleType[2] = roles["Supervisor"]
+        console.log("New Magellan 5 Hour Flight Added: ", startTime, endTime)
+        break;
+      case 'Odyssey 5 Hour Flight':
+        roleType[0] = roles["Odyssey FD"]
+        console.log("New Odyssey 5 Hour Flight Added: ", startTime, endTime)
+        break;
+      case 'Phoenix 5 Hour Flight':
+        roleType[0] = roles["Phoenix FD"]
+        console.log("New Phoenix 5 Hour Flight Added: ", startTime, endTime)
+        break;
+      case 'Galileo 5 Hour Flight':
+        roleType[0] = roles["Galileo FD"]
+        console.log("New Galileo 5 Hour Flight Added: ", startTime, endTime)
+        break;
+    }
+
+    for(let m=0; m<roleType.length; m++){
+
+      let newApptBody = {
+        shift: {
+          start: startTime,
+          end: endTime,
+          user_id: 0,
+          role_id: roleType[m],
+          location_id: LOCATION_ID,
+          department_id: DEPARTMENT_ID,
+          open: true,
+          open_offer_type: 1,
+          notes: (leftOverAppts[k].type + ", " + leftOverAppts[k].id)
+        }
+      }
+      svnShifts.Shifts.create(SVNSHIFTS_API_KEY, newApptBody)
+    }
+    }
 }
 
 

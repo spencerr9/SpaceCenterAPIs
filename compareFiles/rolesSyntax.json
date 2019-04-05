@@ -1,35 +1,95 @@
 {
   "status": "success",
-  "total": 2,
+  "total": 6,
   "offset": 0,
   "limit": 250,
   "data": [
     {
       "role": {
-        "id": 296565,
-        "location_id": 55212,
-        "department_id": 74580,
-        "color": "f44336",
+        "id": 304018,
+        "location_id": 56912,
+        "department_id": 76517,
+        "color": "009688",
         "stations": 0,
-        "name": "Director",
+        "name": "Galileo FD",
         "job_code": "",
-        "created": "2019-03-18 03:14:56",
-        "modified": "2019-03-18 03:14:56",
+        "created": "2019-03-31 23:28:40",
+        "modified": "2019-03-31 23:28:40",
         "sort": 0
       },
       "station": []
     },
     {
       "role": {
-        "id": 296566,
-        "location_id": 55212,
-        "department_id": 74580,
+        "id": 304014,
+        "location_id": 56912,
+        "department_id": 76517,
+        "color": "f44336",
+        "stations": 0,
+        "name": "Magellan FD",
+        "job_code": "",
+        "created": "2019-03-31 23:28:40",
+        "modified": "2019-03-31 23:28:40",
+        "sort": 0
+      },
+      "station": []
+    },
+    {
+      "role": {
+        "id": 304016,
+        "location_id": 56912,
+        "department_id": 76517,
+        "color": "3f51b5",
+        "stations": 0,
+        "name": "Odyssey FD",
+        "job_code": "",
+        "created": "2019-03-31 23:28:40",
+        "modified": "2019-03-31 23:28:40",
+        "sort": 0
+      },
+      "station": []
+    },
+    {
+      "role": {
+        "id": 304017,
+        "location_id": 56912,
+        "department_id": 76517,
+        "color": "2196f3",
+        "stations": 0,
+        "name": "Phoenix FD",
+        "job_code": "",
+        "created": "2019-03-31 23:28:40",
+        "modified": "2019-03-31 23:28:40",
+        "sort": 0
+      },
+      "station": []
+    },
+    {
+      "role": {
+        "id": 304015,
+        "location_id": 56912,
+        "department_id": 76517,
         "color": "9c27b0",
         "stations": 0,
         "name": "Supervisor",
         "job_code": "",
-        "created": "2019-03-18 03:14:56",
-        "modified": "2019-03-18 03:14:56",
+        "created": "2019-03-31 23:28:40",
+        "modified": "2019-03-31 23:28:40",
+        "sort": 0
+      },
+      "station": []
+    },
+    {
+      "role": {
+        "id": 304019,
+        "location_id": 56912,
+        "department_id": 76517,
+        "color": "4caf50",
+        "stations": 0,
+        "name": "Teacher",
+        "job_code": "",
+        "created": "2019-03-31 23:28:40",
+        "modified": "2019-03-31 23:28:40",
         "sort": 0
       },
       "station": []
