@@ -19,7 +19,6 @@ const {
     ACUITY_API_KEY,
     SVNSHIFTS_API_KEY,
     LOCATION_ID,
-    ROLE_ID,
     DEPARTMENT_ID
 } = process.env;
 
@@ -32,15 +31,19 @@ var acuity = Acuity.basic({
 let apptData = []
 
 function acuityAPI(){
-  acuity.request("appointments", function(err, res, appointments) {
+  acuity.request("/appointments?max=1000", function(err, res, appointments) {
     if (err) return console.error(err);
-      // console.log('APPOINTMENTS',appointments);
+      console.log('APPOINTMENTS',appointments.length);
       apptData = appointments
       sevenShiftsAPI();
       // console.log("ApptData = ",apptData)
   });
 }
+
 acuityAPI();
+setInterval(() => {
+  acuityAPI();
+}, 87000000);
 
 // 7 Shifts Endpoints
 let shiftData = {}
@@ -77,40 +80,53 @@ function consoleLog(){
   // console.log("SHIFTS: ", shiftData.data);
   let newShiftData = []
   let leftOverAppts = []
-  let cancelledAppts = []
+  let campAppts = {}
   for(let i=0; i<apptData.length; i++){
     let ADate = new Date(apptData[i].datetime)
     if(ADate < new Date()){
       continue
     }
+    if(apptData[i].type.includes("Camp")){
+      let campKey = apptData[i].type + apptData[i].datetime
+      if(!campAppts[campKey]){
+        apptData[i].id = "***"
+        campAppts[campKey] = true
+      } else {
+        continue
+      }
+    }
     let shiftExists = false
     for(let j=0; j<shiftData.data.length; j++){
-      let SDate = new Date(shiftData.data[j].shift.start)
-      // console.log(ADate.valueOf() == SDate.valueOf(), ADate.valueOf(), SDate.valueOf())
+      if(shiftData.data[j] == null) {
+        continue
+      }
+      SDate = new Date(shiftData.data[j].shift.start)
       if(
-        // ADate.valueOf() === SDate.valueOf()
-        shiftData.data[j].shift.notes.includes(apptData[i].id)
+          shiftData.data[j].shift.notes.includes(apptData[i].id) &&
+          SDate.getTime() == ADate.getTime()
         ){
-          // console.log(true)
         shiftExists = true
-        shiftData.data.splice(j, 1)
-        // break
+        shiftData.data[j] = null
       } 
     }
     if(!shiftExists){
-      // console.log(false)
       leftOverAppts.push(apptData[i]) 
-    } 
+    }
   }
-  // console.log(shiftData.data)
 
   // Deleting shifts for deleted appointments
   for(let l=0; l<shiftData.data.length; l++){
+    if(shiftData.data[l] == null){
+      continue
+    }
     if(new Date(shiftData.data[l].shift.start) < new Date()){
       continue
     }
+    if(shiftData.data[l].shift.notes.includes("Custom")){
+      continue
+    }
     let deletedId = shiftData.data[l].shift.id
-    console.log("Shift Deleted: ", shiftData.data[l].shift.start, shiftData.data[l].shift.end)
+    console.log("Shift Deleted: ", deletedId, shiftData.data[l].shift.start, shiftData.data[l].shift.end)
     svnShifts.Shifts.delete(SVNSHIFTS_API_KEY, deletedId)
     // .catch(err => console.log(err))
   }
@@ -135,11 +151,20 @@ function consoleLog(){
 
     switch (leftOverAppts[k].type) {
       case 'Day Camp':
-        roleType[0] = roles["Teacher"]
+        roleType[0] = roles["Magellan FD"]
+        roleType[1] = roles["Supervisor"]
+        roleType[2] = roles["Supervisor"]
+        roleType[3] = roles["Odyssey FD"]
+        roleType[4] = roles["Galileo FD"]
+        roleType[5] = roles["Phoenix FD"]
         console.log("New Day Camp Added: ", startTime, endTime)
         break;
       case 'Extended Camp':
-        roleType[0] = roles["Teacher"]
+        roleType[0] = roles["Magellan FD"]
+        roleType[1] = roles["Supervisor"]
+        roleType[2] = roles["Supervisor"]
+        roleType[3] = roles["Odyssey FD"]
+        roleType[4] = roles["Galileo FD"]
         console.log("New Extended Camp Added: ", startTime, endTime)
         break;
       case 'Officer Camp':
@@ -147,7 +172,7 @@ function consoleLog(){
         console.log("New Officer Camp Added: ", startTime, endTime)
         break;
       case 'Leadership Camp':
-        roleType[0] = roles["Teacher"]
+        // roleType[0] = roles["Teacher"]
         console.log("New Leadership Camp Added: ", startTime, endTime)
         break;
       case 'Class Field Trip + 2 Simulators (15-25 Students)':
