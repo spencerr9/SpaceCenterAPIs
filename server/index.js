@@ -43,7 +43,7 @@ function acuityAPI(){
 acuityAPI();
 setInterval(() => {
   acuityAPI();
-}, 87000000);
+}, 14000000);
 
 // 7 Shifts Endpoints
 let shiftData = {}
@@ -60,20 +60,6 @@ function sevenShiftsAPI(){
     console.log(err)
   })
 } 
-
-// function createShift(body){
-//   svnShifts.Shifts.create(SVNSHIFTS_API_KEY, body)
-//   .then(console.log())
-// }
-
-// function padLeft(num, length){
-//   while(num.length < length){
-//     num = '0' + num
-//   }
-//   return num
-// }
-
-// console.log(shiftData)
 
 function consoleLog(){
   // console.log("APPTS: ", apptData);
@@ -151,37 +137,22 @@ function consoleLog(){
 
     switch (leftOverAppts[k].type) {
       case 'Day Camp':
-        roleType[0] = roles["Magellan FD"]
-        roleType[1] = roles["Supervisor"]
-        roleType[2] = roles["Supervisor"]
-        roleType[3] = roles["Odyssey FD"]
-        roleType[4] = roles["Galileo FD"]
-        roleType[5] = roles["Phoenix FD"]
-        console.log("New Day Camp Added: ", startTime, endTime)
+        console.log("New Day Camp Scheduled: ", startTime, endTime)
         break;
       case 'Extended Camp':
-        roleType[0] = roles["Magellan FD"]
-        roleType[1] = roles["Supervisor"]
-        roleType[2] = roles["Supervisor"]
-        roleType[3] = roles["Odyssey FD"]
-        roleType[4] = roles["Galileo FD"]
-        console.log("New Extended Camp Added: ", startTime, endTime)
+        console.log("New Extended Camp Scheduled: ", startTime, endTime)
         break;
       case 'Officer Camp':
-        roleType[0] = roles["Teacher"]
-        console.log("New Officer Camp Added: ", startTime, endTime)
+        console.log("New Officer Camp Scheduled: ", startTime, endTime)
         break;
       case 'Leadership Camp':
-        // roleType[0] = roles["Teacher"]
-        console.log("New Leadership Camp Added: ", startTime, endTime)
+        console.log("New Leadership Camp Scheduled: ", startTime, endTime)
         break;
       case 'Class Field Trip + 2 Simulators (15-25 Students)':
-        roleType[0] = roles["Teacher"]
-        console.log("New Class Field Trip Added: ", startTime, endTime)
+        console.log("New Class Field Trip Scheduled: ", startTime, endTime)
         break;
       case 'Class Field Trip + 4 Simulators (27-40 Students)':
-        roleType[0] = roles["Teacher"]
-        console.log("New Class Field Trip Added: ", startTime, endTime)
+        console.log("New Class Field Trip Scheduled: ", startTime, endTime)
         break;
       case 'Magellan 2.5 Hour Flight':
         roleType[0] = roles["Magellan FD"]
