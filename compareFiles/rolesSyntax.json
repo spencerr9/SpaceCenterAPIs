@@ -1,98 +1,98 @@
 {
-  "status": "success",
-  "total": 6,
-  "offset": 0,
-  "limit": 250,
-  "data": [
-    {
-      "role": {
-        "id": 304018,
-        "location_id": 56912,
-        "department_id": 76517,
-        "color": "009688",
-        "stations": 0,
-        "name": "Galileo FD",
-        "job_code": "",
-        "created": "2019-03-31 23:28:40",
-        "modified": "2019-03-31 23:28:40",
-        "sort": 0
-      },
-      "station": []
-    },
-    {
-      "role": {
-        "id": 304014,
-        "location_id": 56912,
-        "department_id": 76517,
-        "color": "f44336",
-        "stations": 0,
-        "name": "Magellan FD",
-        "job_code": "",
-        "created": "2019-03-31 23:28:40",
-        "modified": "2019-03-31 23:28:40",
-        "sort": 0
-      },
-      "station": []
-    },
-    {
-      "role": {
-        "id": 304016,
-        "location_id": 56912,
-        "department_id": 76517,
-        "color": "3f51b5",
-        "stations": 0,
-        "name": "Odyssey FD",
-        "job_code": "",
-        "created": "2019-03-31 23:28:40",
-        "modified": "2019-03-31 23:28:40",
-        "sort": 0
-      },
-      "station": []
-    },
-    {
-      "role": {
-        "id": 304017,
-        "location_id": 56912,
-        "department_id": 76517,
-        "color": "2196f3",
-        "stations": 0,
-        "name": "Phoenix FD",
-        "job_code": "",
-        "created": "2019-03-31 23:28:40",
-        "modified": "2019-03-31 23:28:40",
-        "sort": 0
-      },
-      "station": []
-    },
-    {
-      "role": {
-        "id": 304015,
-        "location_id": 56912,
-        "department_id": 76517,
-        "color": "9c27b0",
-        "stations": 0,
-        "name": "Supervisor",
-        "job_code": "",
-        "created": "2019-03-31 23:28:40",
-        "modified": "2019-03-31 23:28:40",
-        "sort": 0
-      },
-      "station": []
-    },
-    {
-      "role": {
-        "id": 304019,
-        "location_id": 56912,
-        "department_id": 76517,
-        "color": "4caf50",
-        "stations": 0,
-        "name": "Teacher",
-        "job_code": "",
-        "created": "2019-03-31 23:28:40",
-        "modified": "2019-03-31 23:28:40",
-        "sort": 0
-      },
-      "station": []
-    }
-  ]
+    "status": "success",
+    "total": 6,
+    "offset": 0,
+    "limit": 250,
+    "data": [
+        {
+            "role": {
+                "id": 12943,
+                "location_id": 7727,
+                "department_id": 4327,
+                "color": "76a939",
+                "stations": 0,
+                "name": "Magellan FD",
+                "job_code": "",
+                "created": "2014-09-24 17:08:55",
+                "modified": "2015-01-10 01:16:16",
+                "sort": 1
+            },
+            "station": []
+        },
+        {
+            "role": {
+                "id": 12920,
+                "location_id": 7727,
+                "department_id": 4327,
+                "color": "23a577",
+                "stations": 0,
+                "name": "Supervisor",
+                "job_code": "",
+                "created": "2014-09-23 15:31:56",
+                "modified": "2015-01-10 01:16:16",
+                "sort": 2
+            },
+            "station": []
+        },
+        {
+            "role": {
+                "id": 12942,
+                "location_id": 7727,
+                "department_id": 4327,
+                "color": "7910d2",
+                "stations": 0,
+                "name": "Odyssey FD",
+                "job_code": "",
+                "created": "2014-09-24 14:59:36",
+                "modified": "2019-04-01 20:51:17",
+                "sort": 3
+            },
+            "station": []
+        },
+        {
+            "role": {
+                "id": 12941,
+                "location_id": 7727,
+                "department_id": 4327,
+                "color": "fd7000",
+                "stations": 0,
+                "name": "Phoenix FD",
+                "job_code": "",
+                "created": "2014-09-24 14:59:14",
+                "modified": "2015-01-10 01:16:16",
+                "sort": 4
+            },
+            "station": []
+        },
+        {
+            "role": {
+                "id": 12940,
+                "location_id": 7727,
+                "department_id": 4327,
+                "color": "d3d60b",
+                "stations": 0,
+                "name": "Galileo FD",
+                "job_code": "",
+                "created": "2014-09-24 14:58:59",
+                "modified": "2019-04-01 20:51:01",
+                "sort": 5
+            },
+            "station": []
+        },
+        {
+            "role": {
+                "id": 12944,
+                "location_id": 7727,
+                "department_id": 4327,
+                "color": "311c2d",
+                "stations": 0,
+                "name": "Teacher",
+                "job_code": "",
+                "created": "2014-09-24 17:29:48",
+                "modified": "2015-01-10 01:16:16",
+                "sort": 6
+            },
+            "station": []
+        }
+    ]
 }

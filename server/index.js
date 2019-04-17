@@ -64,7 +64,6 @@ function sevenShiftsAPI(){
 function consoleLog(){
   // console.log("APPTS: ", apptData);
   // console.log("SHIFTS: ", shiftData.data);
-  let newShiftData = []
   let leftOverAppts = []
   let campAppts = {}
   for(let i=0; i<apptData.length; i++){
@@ -125,12 +124,12 @@ function consoleLog(){
     // console.log("New Appt Added: ", startTime, endTime)
 
     let roles = {
-      'Galileo FD': 304018,
-      'Magellan FD': 304014,
-      'Odyssey FD': 304016,
-      'Phoenix FD': 304017,
-      'Supervisor': 304015,
-      'Teacher': 304019
+      'Galileo FD': 12940,
+      'Magellan FD': 12943,
+      'Odyssey FD': 12942,
+      'Phoenix FD': 12941,
+      'Supervisor': 12920,
+      'Teacher': 12944
     }
 
     let roleType = []
