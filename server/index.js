@@ -101,8 +101,7 @@ function consoleLog() {
                 leftOverAppts.push(apptData[i])
             }
         }
-    }
-
+      
     // Deleting shifts for deleted appointments
     for (let l = 0; l < shiftData.data.length; l++) {
         if (shiftData.data[l] == null) {
@@ -123,91 +122,80 @@ function consoleLog() {
             .catch(err => console.log(err))
     }
 
-    // Creating shifts for new appts.
-    for (let k = 0; k < leftOverAppts.length; k++) {
+  // Creating shifts for new appts.
+  for(let k=0; k<leftOverAppts.length; k++){
+    let endTimeHour = parseInt(leftOverAppts[k].datetime.substr(11,2))+2 >= 24 ? parseInt(leftOverAppts[k].datetime.substr(11,2))+2 - 24: parseInt(leftOverAppts[k].datetime.substr(11,2))+2
+    let startTime = leftOverAppts[k].datetime.replace("T"," ").substr(0, 19)
+    let endTime = startTime.substr(0, 11)+endTimeHour+startTime.substr(13, 6)
+    // console.log("New Appt Added: ", startTime, endTime)
 
-        // console.log("New Appt Added: ", startTime, endTime)
+    let roles = {
+      'Galileo FD': 12940,
+      'Magellan FD': 12943,
+      'Odyssey FD': 12942,
+      'Phoenix FD': 12941,
+      'Supervisor': 12920,
+      'Teacher': 12944
+    }
 
-        let roles = {
-            'Galileo FD': 12940,
-            'Magellan FD': 12943,
-            'Odyssey FD': 12942,
-            'Phoenix FD': 12941,
-            'Supervisor': 12920,
-            'Teacher': 12944
-        }
+    let roleType = []
 
-        let roleType = []
-        let endTimeHour;
-        let startTime;
-        let endTime;
-
-        switch (leftOverAppts[k].type) {
-            case 'Day Camp':
-                //console.log("New Day Camp Scheduled: ", startTime, endTime)
-                break;
-            case 'Extended Camp':
-                //console.log("New Extended Camp Scheduled: ", startTime, endTime)
-                break;
-            case 'Officer Camp':
-                //console.log("New Officer Camp Scheduled: ", startTime, endTime)
-                break;
-            case 'Leadership Camp':
-                //console.log("New Leadership Camp Scheduled: ", startTime, endTime)
-                break;
-            case 'Class Field Trip + 2 Simulators (15-25 Students)':
-                //console.log("New Class Field Trip Scheduled: ", startTime, endTime)
-                break;
-            case 'Class Field Trip + 4 Simulators (27-40 Students)':
-                //console.log("New Class Field Trip Scheduled: ", startTime, endTime)
-                break;
-            case 'Magellan 2.5 Hour Flight':
-                endTimeHour = parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2 >= 24 ? parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2 - 24 : parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2
-                roleType[0] = roles["Magellan FD"]
-                roleType[1] = roles["Supervisor"]
-                roleType[2] = roles["Supervisor"]
-                console.log("New Magellan 2.5 Hour Flight Added: ", startTime, endTime)
-                break;
-            case 'Odyssey 2.5 Hour Flight':
-                endTimeHour = parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2 >= 24 ? parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2 - 24 : parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2
-                roleType[0] = roles["Odyssey FD"]
-                console.log("New Odyssey 2.5 Hour Flight Added: ", startTime, endTime)
-                break;
-            case 'Phoenix 2.5 Hour Flight':
-                endTimeHour = parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2 >= 24 ? parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2 - 24 : parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2
-                roleType[0] = roles["Phoenix FD"]
-                console.log("New Phoenix 2.5 Hour Flight Added: ", startTime, endTime)
-                break;
-            case 'Galileo 2.5 Hour Flight':
-                endTimeHour = parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2 >= 24 ? parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2 - 24 : parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2
-                roleType[0] = roles["Galileo FD"]
-                console.log("New Galileo 2.5 Hour Flight Added: ", startTime, endTime)
-                break;
-            case 'Magellan 5 Hour Flight':
-                endTimeHour = parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2 >= 24 ? parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2 - 24 : parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2
-                roleType[0] = roles["Magellan FD"]
-                roleType[1] = roles["Supervisor"]
-                roleType[2] = roles["Supervisor"]
-                console.log("New Magellan 5 Hour Flight Added: ", startTime, endTime)
-                break;
-            case 'Odyssey 5 Hour Flight':
-                endTimeHour = parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2 >= 24 ? parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2 - 24 : parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2
-                roleType[0] = roles["Odyssey FD"]
-                console.log("New Odyssey 5 Hour Flight Added: ", startTime, endTime)
-                break;
-            case 'Phoenix 5 Hour Flight':
-                endTimeHour = parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2 >= 24 ? parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2 - 24 : parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2
-                roleType[0] = roles["Phoenix FD"]
-                console.log("New Phoenix 5 Hour Flight Added: ", startTime, endTime)
-                break;
-            case 'Galileo 5 Hour Flight':
-                endTimeHour = parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2 >= 24 ? parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2 - 24 : parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2
-                roleType[0] = roles["Galileo FD"]
-                console.log("New Galileo 5 Hour Flight Added: ", startTime, endTime)
-                break;
-        }
-        startTime = leftOverAppts[k].datetime.replace("T", " ").substr(0, 19)
-        endTime = startTime.substr(0, 11) + endTimeHour + startTime.substr(13, 6)
+    switch (leftOverAppts[k].type) {
+      // case 'Day Camp':
+      //   console.log("New Day Camp Scheduled: ", startTime, endTime)
+      //   break;
+      // case 'Extended Camp':
+      //   console.log("New Extended Camp Scheduled: ", startTime, endTime)
+      //   break;
+      // case 'Officer Camp':
+      //   console.log("New Officer Camp Scheduled: ", startTime, endTime)
+      //   break;
+      // case 'Leadership Camp':
+      //   console.log("New Leadership Camp Scheduled: ", startTime, endTime)
+      //   break;
+      // case 'Class Field Trip + 2 Simulators (15-25 Students)':
+      //   console.log("New Class Field Trip Scheduled: ", startTime, endTime)
+      //   break;
+      // case 'Class Field Trip + 4 Simulators (27-40 Students)':
+      //   console.log("New Class Field Trip Scheduled: ", startTime, endTime)
+      //   break;
+      case 'Magellan 2.5 Hour Flight':
+        roleType[0] = roles["Magellan FD"]
+        roleType[1] = roles["Supervisor"]
+        roleType[2] = roles["Supervisor"]
+        console.log("New Magellan 2.5 Hour Flight Added: ", startTime, endTime)
+        break;
+      case 'Odyssey 2.5 Hour Flight':
+        roleType[0] = roles["Odyssey FD"]
+        console.log("New Odyssey 2.5 Hour Flight Added: ", startTime, endTime)
+        break;
+      case 'Phoenix 2.5 Hour Flight':
+        roleType[0] = roles["Phoenix FD"]
+        console.log("New Phoenix 2.5 Hour Flight Added: ", startTime, endTime)
+        break;
+      case 'Galileo 2.5 Hour Flight':
+        roleType[0] = roles["Galileo FD"]
+        console.log("New Galileo 2.5 Hour Flight Added: ", startTime, endTime)
+        break;
+      case 'Magellan 5 Hour Flight':
+        roleType[0] = roles["Magellan FD"]
+        roleType[1] = roles["Supervisor"]
+        roleType[2] = roles["Supervisor"]
+        console.log("New Magellan 5 Hour Flight Added: ", startTime, endTime)
+        break;
+      case 'Odyssey 5 Hour Flight':
+        roleType[0] = roles["Odyssey FD"]
+        console.log("New Odyssey 5 Hour Flight Added: ", startTime, endTime)
+        break;
+      case 'Phoenix 5 Hour Flight':
+        roleType[0] = roles["Phoenix FD"]
+        console.log("New Phoenix 5 Hour Flight Added: ", startTime, endTime)
+        break;
+      case 'Galileo 5 Hour Flight':
+        roleType[0] = roles["Galileo FD"]
+        console.log("New Galileo 5 Hour Flight Added: ", startTime, endTime)
+        break;
+    }
         for (let m = 0; m < roleType.length; m++) {
 
             let newApptBody = {
