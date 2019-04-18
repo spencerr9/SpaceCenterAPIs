@@ -86,7 +86,8 @@ function consoleLog(){
         continue
       }
       SDate = new Date(shiftData.data[j].shift.start)
-      if(
+      if( 
+          (!shiftData.data[j].shift.deleted) &&
           shiftData.data[j].shift.notes.includes(apptData[i].id) &&
           SDate.getTime() == ADate.getTime()
         ){
@@ -108,6 +109,9 @@ function consoleLog(){
       continue
     }
     if(shiftData.data[l].shift.notes.includes("Custom")){
+      continue
+    }
+    if(shiftData.data[l].shift.deleted){
       continue
     }
     let deletedId = shiftData.data[l].shift.id
@@ -135,24 +139,24 @@ function consoleLog(){
     let roleType = []
 
     switch (leftOverAppts[k].type) {
-      case 'Day Camp':
-        console.log("New Day Camp Scheduled: ", startTime, endTime)
-        break;
-      case 'Extended Camp':
-        console.log("New Extended Camp Scheduled: ", startTime, endTime)
-        break;
-      case 'Officer Camp':
-        console.log("New Officer Camp Scheduled: ", startTime, endTime)
-        break;
-      case 'Leadership Camp':
-        console.log("New Leadership Camp Scheduled: ", startTime, endTime)
-        break;
-      case 'Class Field Trip + 2 Simulators (15-25 Students)':
-        console.log("New Class Field Trip Scheduled: ", startTime, endTime)
-        break;
-      case 'Class Field Trip + 4 Simulators (27-40 Students)':
-        console.log("New Class Field Trip Scheduled: ", startTime, endTime)
-        break;
+      // case 'Day Camp':
+      //   console.log("New Day Camp Scheduled: ", startTime, endTime)
+      //   break;
+      // case 'Extended Camp':
+      //   console.log("New Extended Camp Scheduled: ", startTime, endTime)
+      //   break;
+      // case 'Officer Camp':
+      //   console.log("New Officer Camp Scheduled: ", startTime, endTime)
+      //   break;
+      // case 'Leadership Camp':
+      //   console.log("New Leadership Camp Scheduled: ", startTime, endTime)
+      //   break;
+      // case 'Class Field Trip + 2 Simulators (15-25 Students)':
+      //   console.log("New Class Field Trip Scheduled: ", startTime, endTime)
+      //   break;
+      // case 'Class Field Trip + 4 Simulators (27-40 Students)':
+      //   console.log("New Class Field Trip Scheduled: ", startTime, endTime)
+      //   break;
       case 'Magellan 2.5 Hour Flight':
         roleType[0] = roles["Magellan FD"]
         roleType[1] = roles["Supervisor"]
