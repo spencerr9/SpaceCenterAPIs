@@ -7,11 +7,11 @@ const bodyParser = require("body-parser");
 var Acuity = require("acuityscheduling");
 var svnShifts = require('7shifts')
 
-const app = express();
+//const app = express();
 
-top-level middleware
-app.use(bodyParser.json());
-app.use(express.json());
+//top-level middleware
+//app.use(bodyParser.json());
+//app.use(express.json());
 
 const {
     PORT,
@@ -138,6 +138,9 @@ function consoleLog() {
         }
 
         let roleType = []
+        let endTimeHour;
+        let startTime;
+        let endTime;
 
         switch (leftOverAppts[k].type) {
             case 'Day Camp':
@@ -159,52 +162,52 @@ function consoleLog() {
                 //console.log("New Class Field Trip Scheduled: ", startTime, endTime)
                 break;
             case 'Magellan 2.5 Hour Flight':
-                let endTimeHour = parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2 >= 24 ? parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2 - 24 : parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2
+                endTimeHour = parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2 >= 24 ? parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2 - 24 : parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2
                 roleType[0] = roles["Magellan FD"]
                 roleType[1] = roles["Supervisor"]
                 roleType[2] = roles["Supervisor"]
                 console.log("New Magellan 2.5 Hour Flight Added: ", startTime, endTime)
                 break;
             case 'Odyssey 2.5 Hour Flight':
-                let endTimeHour = parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2 >= 24 ? parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2 - 24 : parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2
+                endTimeHour = parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2 >= 24 ? parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2 - 24 : parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2
                 roleType[0] = roles["Odyssey FD"]
                 console.log("New Odyssey 2.5 Hour Flight Added: ", startTime, endTime)
                 break;
             case 'Phoenix 2.5 Hour Flight':
-                let endTimeHour = parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2 >= 24 ? parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2 - 24 : parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2
+                endTimeHour = parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2 >= 24 ? parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2 - 24 : parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2
                 roleType[0] = roles["Phoenix FD"]
                 console.log("New Phoenix 2.5 Hour Flight Added: ", startTime, endTime)
                 break;
             case 'Galileo 2.5 Hour Flight':
-                let endTimeHour = parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2 >= 24 ? parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2 - 24 : parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2
+                endTimeHour = parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2 >= 24 ? parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2 - 24 : parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2
                 roleType[0] = roles["Galileo FD"]
                 console.log("New Galileo 2.5 Hour Flight Added: ", startTime, endTime)
                 break;
             case 'Magellan 5 Hour Flight':
-                let endTimeHour = parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2 >= 24 ? parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2 - 24 : parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2
+                endTimeHour = parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2 >= 24 ? parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2 - 24 : parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2
                 roleType[0] = roles["Magellan FD"]
                 roleType[1] = roles["Supervisor"]
                 roleType[2] = roles["Supervisor"]
                 console.log("New Magellan 5 Hour Flight Added: ", startTime, endTime)
                 break;
             case 'Odyssey 5 Hour Flight':
-                let endTimeHour = parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2 >= 24 ? parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2 - 24 : parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2
+                endTimeHour = parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2 >= 24 ? parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2 - 24 : parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2
                 roleType[0] = roles["Odyssey FD"]
                 console.log("New Odyssey 5 Hour Flight Added: ", startTime, endTime)
                 break;
             case 'Phoenix 5 Hour Flight':
-                let endTimeHour = parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2 >= 24 ? parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2 - 24 : parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2
+                endTimeHour = parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2 >= 24 ? parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2 - 24 : parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2
                 roleType[0] = roles["Phoenix FD"]
                 console.log("New Phoenix 5 Hour Flight Added: ", startTime, endTime)
                 break;
             case 'Galileo 5 Hour Flight':
-                let endTimeHour = parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2 >= 24 ? parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2 - 24 : parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2
+                endTimeHour = parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2 >= 24 ? parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2 - 24 : parseInt(leftOverAppts[k].datetime.substr(11, 2)) + 2
                 roleType[0] = roles["Galileo FD"]
                 console.log("New Galileo 5 Hour Flight Added: ", startTime, endTime)
                 break;
         }
-        let startTime = leftOverAppts[k].datetime.replace("T", " ").substr(0, 19)
-        let endTime = startTime.substr(0, 11) + endTimeHour + startTime.substr(13, 6)
+        startTime = leftOverAppts[k].datetime.replace("T", " ").substr(0, 19)
+        endTime = startTime.substr(0, 11) + endTimeHour + startTime.substr(13, 6)
         for (let m = 0; m < roleType.length; m++) {
 
             let newApptBody = {
@@ -226,6 +229,6 @@ function consoleLog() {
 }
 
 
-app.listen(PORT, function() {
-  console.log(`Listening on port ${PORT}`);
-});
+//app.listen(PORT, function() {
+//  console.log(`Listening on port ${PORT}`);
+//});
