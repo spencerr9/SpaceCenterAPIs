@@ -1,4 +1,4 @@
-require('dotenv').config({path: '../.env'});
+require('dotenv').config({ path: '../.env' });
 
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -23,99 +23,104 @@ const {
 } = process.env;
 
 var acuity = Acuity.basic({
-  userId: ACUITY_USER_ID,
-  apiKey: ACUITY_API_KEY
+    userId: ACUITY_USER_ID,
+    apiKey: ACUITY_API_KEY
 });
 
 // Acuity Endpoints
 let apptData = []
 
-function acuityAPI(){
-  acuity.request("/appointments?max=1000", function(err, res, appointments) {
-    if (err) return console.error(err);
-      console.log('APPOINTMENTS',appointments.length);
-      apptData = appointments
-      sevenShiftsAPI();
-      // console.log("ApptData = ",apptData)
-  });
+function acuityAPI() {
+    acuity.request("/appointments?max=1000", function(err, res, appointments) {
+        if (err) return console.error(err);
+        console.log('APPOINTMENTS', appointments.length);
+        apptData = appointments
+        sevenShiftsAPI();
+        // console.log("ApptData = ",apptData)
+    });
 }
 
 acuityAPI();
 setInterval(() => {
-  acuityAPI();
+    acuityAPI();
 }, 14000000);
 
 // 7 Shifts Endpoints
 let shiftData = {}
 
-function sevenShiftsAPI(){
-  svnShifts.Shifts.list(SVNSHIFTS_API_KEY)
-  .then(function (resp) {
-    // console.log("7SHIFTS RESONSE>>>> ",resp.body)
-    shiftData = JSON.parse(resp.body)
-    consoleLog();
-    // console.log("ShiftData = ",shiftData)
-  })
-  .catch(function (err) {
-    console.log(err)
-  })
-} 
+function sevenShiftsAPI() {
+    svnShifts.Shifts.list(SVNSHIFTS_API_KEY)
+        .then(function(resp) {
+            // console.log("7SHIFTS RESONSE>>>> ",resp.body)
+            shiftData = JSON.parse(resp.body)
+            consoleLog();
+            // console.log("ShiftData = ",shiftData)
+        })
+        .catch(function(err) {
+            console.log(err)
+        })
+}
 
-function consoleLog(){
-  // console.log("APPTS: ", apptData);
-  // console.log("SHIFTS: ", shiftData.data);
-  let newShiftData = []
-  let leftOverAppts = []
-  let campAppts = {}
-  for(let i=0; i<apptData.length; i++){
-    let ADate = new Date(apptData[i].datetime)
-    if(ADate < new Date()){
-      continue
+function consoleLog() {
+    // console.log("APPTS: ", apptData);
+    // console.log("SHIFTS: ", shiftData.data);
+    let leftOverAppts = []
+    let campAppts = {}
+    for (let i = 0; i < apptData.length; i++) {
+        let ADate = new Date(apptData[i].datetime)
+        if (ADate < new Date()) {
+            continue
+        }
+        if (apptData[i].type.includes("Camp")) {
+            let campKey = apptData[i].type + apptData[i].datetime
+            if (!campAppts[campKey]) {
+                apptData[i].id = "***"
+                campAppts[campKey] = true
+            } else {
+                continue
+            }
+        }
+        let repeatAmount = (apptData[i].type.includes("Magellan") ? 3 : 1)
+        for (let repeatStep = 0; repeatStep < repeatAmount; repeatStep++) {
+            let shiftExists = false
+            for (let j = 0; j < shiftData.data.length; j++) {
+                if (shiftData.data[j] == null) {
+                    continue
+                }
+                SDate = new Date(shiftData.data[j].shift.start)
+                if (
+                    shiftData.data[j].shift.notes.includes(apptData[i].id) &&
+                    SDate.getTime() == ADate.getTime()
+                ) {
+                    shiftExists = true
+                    shiftData.data[j] = null
+                    break;
+                }
+            }
+            if (!shiftExists) {
+                leftOverAppts.push(apptData[i])
+            }
+        }
+      
+    // Deleting shifts for deleted appointments
+    for (let l = 0; l < shiftData.data.length; l++) {
+        if (shiftData.data[l] == null) {
+            continue
+        }
+        if (new Date(shiftData.data[l].shift.start) < new Date()) {
+            continue
+        }
+        if (shiftData.data[l].shift.notes.includes("Custom")) {
+            continue
+        }
+        if (shiftData.data[l].shift.deleted === true) {
+            continue
+        }
+        let deletedId = shiftData.data[l].shift.id
+        console.log("Shift Deleted: ", deletedId, shiftData.data[l].shift.start, shiftData.data[l].shift.end)
+        svnShifts.Shifts.delete(SVNSHIFTS_API_KEY, deletedId)
+            .catch(err => console.log(err))
     }
-    if(apptData[i].type.includes("Camp")){
-      let campKey = apptData[i].type + apptData[i].datetime
-      if(!campAppts[campKey]){
-        apptData[i].id = "***"
-        campAppts[campKey] = true
-      } else {
-        continue
-      }
-    }
-    let shiftExists = false
-    for(let j=0; j<shiftData.data.length; j++){
-      if(shiftData.data[j] == null) {
-        continue
-      }
-      SDate = new Date(shiftData.data[j].shift.start)
-      if(
-          shiftData.data[j].shift.notes.includes(apptData[i].id) &&
-          SDate.getTime() == ADate.getTime()
-        ){
-        shiftExists = true
-        shiftData.data[j] = null
-      } 
-    }
-    if(!shiftExists){
-      leftOverAppts.push(apptData[i]) 
-    }
-  }
-
-  // Deleting shifts for deleted appointments
-  for(let l=0; l<shiftData.data.length; l++){
-    if(shiftData.data[l] == null){
-      continue
-    }
-    if(new Date(shiftData.data[l].shift.start) < new Date()){
-      continue
-    }
-    if(shiftData.data[l].shift.notes.includes("Custom")){
-      continue
-    }
-    let deletedId = shiftData.data[l].shift.id
-    console.log("Shift Deleted: ", deletedId, shiftData.data[l].shift.start, shiftData.data[l].shift.end)
-    svnShifts.Shifts.delete(SVNSHIFTS_API_KEY, deletedId)
-    // .catch(err => console.log(err))
-  }
 
   // Creating shifts for new appts.
   for(let k=0; k<leftOverAppts.length; k++){
@@ -191,31 +196,25 @@ function consoleLog(){
         console.log("New Galileo 5 Hour Flight Added: ", startTime, endTime)
         break;
     }
+        for (let m = 0; m < roleType.length; m++) {
 
-    for(let m=0; m<roleType.length; m++){
-
-      let newApptBody = {
-        shift: {
-          start: startTime,
-          end: endTime,
-          user_id: 0,
-          role_id: roleType[m],
-          location_id: LOCATION_ID,
-          department_id: DEPARTMENT_ID,
-          open: true,
-          open_offer_type: 1,
-          notes: (leftOverAppts[k].type + ", " + leftOverAppts[k].id)
+            let newApptBody = {
+                shift: {
+                    start: startTime,
+                    end: endTime,
+                    user_id: 0,
+                    role_id: roleType[m],
+                    location_id: LOCATION_ID,
+                    department_id: DEPARTMENT_ID,
+                    open: true,
+                    open_offer_type: 1,
+                    notes: (leftOverAppts[k].type + ", " + leftOverAppts[k].id)
+                }
+            }
+            svnShifts.Shifts.create(SVNSHIFTS_API_KEY, newApptBody)
         }
-      }
-      svnShifts.Shifts.create(SVNSHIFTS_API_KEY, newApptBody)
-    }
     }
 }
-
-
-
-
-
 
 
 app.listen(PORT, function() {
