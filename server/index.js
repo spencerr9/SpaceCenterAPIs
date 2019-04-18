@@ -7,11 +7,11 @@ const bodyParser = require("body-parser");
 var Acuity = require("acuityscheduling");
 var svnShifts = require('7shifts')
 
-//const app = express();
+const app = express();
 
 //top-level middleware
-//app.use(bodyParser.json());
-//app.use(express.json());
+app.use(bodyParser.json());
+app.use(express.json());
 
 const {
     PORT,
@@ -229,6 +229,6 @@ function consoleLog() {
 }
 
 
-//app.listen(PORT, function() {
-//  console.log(`Listening on port ${PORT}`);
-//});
+app.listen(PORT, function() {
+  console.log(`Listening on port ${PORT}`);
+});
