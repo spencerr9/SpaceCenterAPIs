@@ -73,7 +73,7 @@ function deleteShifts(shiftsToDelete) {
     }
     let deletedId = shiftsToDelete[l].shift.id
     console.log("Shift Deleted: ", shiftsToDelete[l].shift.notes, shiftsToDelete[l].shift.start, shiftsToDelete[l].shift.end)
-    svnShifts.Shifts.delete(SVNSHIFTS_API_KEY, deletedId)
+    //svnShifts.Shifts.delete(SVNSHIFTS_API_KEY, deletedId)
   }
 }
 
@@ -168,7 +168,7 @@ function createShifts(shiftsToCreate) {
           notes: (shiftsToCreate[k].type + ", " + shiftsToCreate[k].id)
         }
       }
-      svnShifts.Shifts.create(SVNSHIFTS_API_KEY, newApptBody)
+      //svnShifts.Shifts.create(SVNSHIFTS_API_KEY, newApptBody)
     }
   }
 }
