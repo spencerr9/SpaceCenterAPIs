@@ -26,11 +26,11 @@ var acuity = Acuity.basic({
 });
 
 
-//Timing Scripts
+//Timing Scripts. 6-HOUR INTERVALS
 getAcuityData();
 setInterval(() => {
   getAcuityData();
-}, 14000000);
+}, 21750000);
 
 
 
@@ -88,7 +88,8 @@ function createShifts(shiftsToCreate) {
     }
     let roleType = []
     if (shiftsToCreate[k].type.includes('Field Trip') ||
-      shiftsToCreate[k].type.includes('Camp')
+      shiftsToCreate[k].type.includes('Camp') || 
+      shiftsToCreate[k].type.includes('MIT')
     ) {
       continue
     }
