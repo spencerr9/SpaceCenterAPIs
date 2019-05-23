@@ -89,7 +89,8 @@ function createShifts(shiftsToCreate) {
     let roleType = []
     if (shiftsToCreate[k].type.includes('Field Trip') ||
       shiftsToCreate[k].type.includes('Camp') || 
-      shiftsToCreate[k].type.includes('MIT')
+      shiftsToCreate[k].type.includes('MIT') || 
+      shiftsToCreate[k].type.includes('Stanford')
     ) {
       continue
     }
