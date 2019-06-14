@@ -40,7 +40,8 @@ let apptData = []
 function getAcuityData() {
   acuity.request("/appointments?max=1000", function(err, res, appointments) {
     if (err) return console.error(err);
-    console.log('APPOINTMENTS', appointments.length);
+    console.log('APPOINTMENTS:', appointments.length);
+    console.log(`CYCLE TIME: ${new Date()}`);
     apptData = appointments
     getSevenShiftsData();
   });
