@@ -30,7 +30,7 @@ var acuity = Acuity.basic({
 getAcuityData();
 setInterval(() => {
   getAcuityData();
-}, 21750000);
+}, 21600000);
 
 
 
