@@ -195,7 +195,8 @@ function isAMatch(i) {
 
     let SDate = new Date(shiftData.data[j].shift.start)
     if ((!shiftData.data[j].shift.deleted) && //If the shift is not deleted
-      shiftData.data[j].shift.notes.includes(apptData[i].id) && //If the notes include the type and id of appt
+      shiftData.data[j].shift.notes.includes(apptData[i].id) && //If the notes include the id of appt
+      shiftData.data[j].shift.notes.includes(apptData[i].type) && //If the notes include the type of appt
       SDate.getTime() == ADate.getTime()) { //If the times Match
       shiftData.data[j] = null
       return true;
