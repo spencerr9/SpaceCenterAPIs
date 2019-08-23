@@ -88,7 +88,8 @@ function createShifts(shiftsToCreate) {
       'Teacher': 12944
     }
     let roleType = []
-    if (shiftsToCreate[k].type.includes('Field Trip') ||
+    if (
+      // shiftsToCreate[k].type.includes('Field Trip') ||
       shiftsToCreate[k].type.includes('Camp') || 
       shiftsToCreate[k].type.includes('MIT') || 
       shiftsToCreate[k].type.includes('Stanford')
@@ -135,17 +136,49 @@ function createShifts(shiftsToCreate) {
         lengthOfTime = 5
         roleType[0] = roles["Galileo FD"]
         break;
+      case 'Class Field Trip + 4 Simulators (27-40 Students)':
+        lengthOfTime = 4.75
+        roleType[0] = roles["Galileo FD"]
+        roleType[1] = roles["Magellan FD"]
+        roleType[2] = roles["Odyssey FD"]
+        roleType[3] = roles["Phoenix FD"]
+        roleType[4] = roles["Supervisor"]
+        roleType[5] = roles["Supervisor"]
+        roleType[6] = roles["Teacher"]
+        roleType[7] = roles["Teacher"]
+        break;
+      case 'Class Field Trip + 3 Simulators (22-32 Students)':
+        lengthOfTime = 4.75
+        roleType[0] = roles["Magellan FD"]
+        roleType[1] = roles["Odyssey FD"]
+        roleType[2] = roles["Phoenix FD"]
+        roleType[3] = roles["Supervisor"]
+        roleType[4] = roles["Supervisor"]
+        roleType[5] = roles["Teacher"]
+        roleType[6] = roles["Teacher"]
+        break;
+      case 'Class Field Trip + 2 Simulators (15-25 Students)':
+        lengthOfTime = 4.75
+        roleType[0] = roles["Magellan FD"]
+        roleType[1] = roles["Odyssey FD"]
+        roleType[2] = roles["Supervisor"]
+        roleType[3] = roles["Supervisor"]
+        roleType[4] = roles["Teacher"]
+        break;
     }
 
     let startTime = getFormattedDate(new Date(shiftsToCreate[k].datetime))
+    let startTimeFieldTrip = getFormattedDateFieldTrip(new Date(shiftsToCreate[k].datetime))
     let endTime = getFormattedDate(new Date(shiftsToCreate[k].datetime).addHours(lengthOfTime))
+
+    if(shiftsToCreate[k].type.includes('Field Trip')){startTimeFieldTrip} else {startTime}
 
     console.log("New " + shiftsToCreate[k].type + " Added: ", startTime, endTime)
 
     for (let m = 0; m < roleType.length; m++) {
       let newApptBody = {
         shift: {
-          start: startTime,
+          start: shiftsToCreate[k].type.includes('Field Trip') ? startTimeFieldTrip : startTime, // If the appt is a field trip, use startTimeFieldTrip. If not, use startTime
           end: endTime,
           user_id: 0,
           role_id: roleType[m],
@@ -225,27 +258,34 @@ function getFormattedDate(dateObj) {
   return dateObj;
 }
 
-function findAssociatedShifts(apptData) {
-  let ADate = new Date(apptData[i].datetime)
-  let foundShifts = []
-  let findAnotherAppt = true
-  while (findAnotherAppt) {
-    for (let j = 0; j < shiftData.data.length; j++) {
-      if (shiftData.data[j] == null) { continue }
-
-      let SDate = new Date(shiftData.data[j].shift.start)
-      findAnotherAppt = false
-      if ((!shiftData.data[j].shift.deleted) && //If the shift is not deleted
-        shiftData.data[j].shift.notes.includes(apptData[i].id) && //If the notes include the type and id of appt
-        SDate.getTime() == ADate.getTime()) { //If the times Match
-        foundShifts.push(shiftData.data[j])
-        shiftData.data[j] = null
-        findAnotherAppt = true
-      }
-    }
-  }
-  return foundShifts
+function getFormattedDateFieldTrip(dateObj) {
+  let month = '' + (dateObj.getMonth() + 1)
+  let day = '' + (dateObj.getDate())
+  let year = '' + (dateObj.getFullYear())
+  return `${year}-${month}-${day} 9:00:00`; // Field trips always start at 9:00am
 }
+
+// function findAssociatedShifts(apptData) {
+//   let ADate = new Date(apptData[i].datetime)
+//   let foundShifts = []
+//   let findAnotherAppt = true
+//   while (findAnotherAppt) {
+//     for (let j = 0; j < shiftData.data.length; j++) {
+//       if (shiftData.data[j] == null) { continue }
+
+//       let SDate = new Date(shiftData.data[j].shift.start)
+//       findAnotherAppt = false
+//       if ((!shiftData.data[j].shift.deleted) && //If the shift is not deleted
+//         shiftData.data[j].shift.notes.includes(apptData[i].id) && //If the notes include the type and id of appt
+//         SDate.getTime() == ADate.getTime()) { //If the times Match
+//         foundShifts.push(shiftData.data[j])
+//         shiftData.data[j] = null
+//         findAnotherAppt = true
+//       }
+//     }
+//   }
+//   return foundShifts
+// }
 
 app.listen(PORT, function() {
   console.log(`Listening on port ${PORT}`);
