@@ -64,10 +64,10 @@ function getSevenShiftsData() {
 
 function deleteShifts(shiftsToDelete) {
   for (let l = 0; l < shiftsToDelete.length; l++) {
-    if (shiftsToDelete[l] == null ||
-      new Date(shiftsToDelete[l].shift.start) < new Date() ||
-      shiftsToDelete[l].shift.notes.includes("Custom") ||
-      shiftsToDelete[l].shift.deleted) {
+    if (shiftsToDelete[l] == null || // skip over if the appt is null
+      new Date(shiftsToDelete[l].shift.start) < new Date() || // skip over appts in the past
+      shiftsToDelete[l].shift.notes.includes("Custom") || // skip over appts that include "Custom" in the notes
+      shiftsToDelete[l].shift.deleted) { // skip over appts where deleted:true in the appts object
       continue
     }
     let deletedId = shiftsToDelete[l].shift.id
@@ -195,7 +195,7 @@ function createShifts(shiftsToCreate) {
 }
 
 
-
+// Finds whether the shift exists based on appts pulled from Acuity
 function processData() {
   let leftOverAppts = []
   for (let i = 0; i < apptData.length; i++) {
@@ -204,7 +204,7 @@ function processData() {
       continue
     }
     let shiftExists
-    if (apptData[i].type.includes('Magellan')) {
+    if (apptData[i].type.includes('Magellan')) { // MAY NEED TO ADD SUPPORT FOR DIFFERENT FIELD TRIPS HERE!!!!!
       shiftExists = isAMatch(i)
       shiftExists = isAMatch(i)
       shiftExists = isAMatch(i)
@@ -212,13 +212,13 @@ function processData() {
       shiftExists = isAMatch(i)
     }
 
-    if (!shiftExists) {
+    if (!shiftExists) { // If shifts don't exist, push them onto the leftOverAppts array.
       leftOverAppts.push(apptData[i])
     }
   }
 
-  deleteShifts(shiftData.data)
-  createShifts(leftOverAppts)
+  deleteShifts(shiftData.data) // This is where shifts get deleted
+  createShifts(leftOverAppts) // This is where shifts get created
 }
 
 function isAMatch(i) {
