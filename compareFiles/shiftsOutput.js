@@ -1,4 +1,4 @@
-{
+module.exports = {
     "status": "success",
     "total": 127,
     "offset": 0,

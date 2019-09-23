@@ -51,16 +51,28 @@ function getAcuityData() {
 }
 
 // 7 Shifts Endpoints
-let shiftData = {};
+let shiftData = {};  // shiftdata.data now equals shiftDataArr throughout the program
+let shiftDataArr = []
 
 function getSevenShiftsData(offset) {
-  offset = 0
+  offset = typeof offset !== 'undefined' ? offset : 0
   svnShifts.Shifts.list(SVNSHIFTS_API_KEY, offset)
     .then(function(resp) {
-      console.log('resp',resp.body)
       shiftData = JSON.parse(resp.body)
-      console.log('line 62',shiftData.data);
-      processData();
+      console.log('totalShifts',shiftData.data.length);
+      shiftDataArr.push(shiftData.data)
+    })
+    .then(function(){
+      shiftDataArr = [].concat.apply([],shiftDataArr)
+      console.log('shiftDataArr',shiftDataArr.length)
+      if(offset < 2001){
+        console.log('offset', offset)
+        // console.log(shiftDataArr)
+        return getSevenShiftsData(offset + 500)
+      } else {
+        processData();
+        return shiftDataArr
+      }
     })
     .catch(function(err) {
       console.log(err);
@@ -73,18 +85,11 @@ function deleteShifts(shiftsToDelete) {
       shiftsToDelete[l] == null || // skip over if the appt is null
       new Date(shiftsToDelete[l].shift.start) < new Date() || // skip over appts in the past
       shiftsToDelete[l].shift.notes.includes("Custom") || // skip over appts that include "Custom" in the notes
-      shiftsToDelete[l].shift.deleted
-    ) {
-      // skip over appts where deleted:true in the appts object
+      shiftsToDelete[l].shift.deleted) { // skip over appts where deleted:true in the appts object
       continue;
     }
     let deletedId = shiftsToDelete[l].shift.id;
-    console.log(
-      "Shift Deleted: ",
-      shiftsToDelete[l].shift.notes,
-      shiftsToDelete[l].shift.start,
-      shiftsToDelete[l].shift.end
-    );
+    console.log("Shift Deleted: ", shiftsToDelete[l].shift.notes, shiftsToDelete[l].shift.start, shiftsToDelete[l].shift.end);
     svnShifts.Shifts.delete(SVNSHIFTS_API_KEY, deletedId);
   }
 }
@@ -181,23 +186,17 @@ function createShifts(shiftsToCreate) {
     }
 
     let startTime = getFormattedDate(new Date(shiftsToCreate[k].datetime));
-    let startTimeFieldTrip = getFormattedDateFieldTrip(
-      new Date(shiftsToCreate[k].datetime)
-    ); // Field trip shifts always start at 9am
+    let startTimeFieldTrip = getFormattedDateFieldTrip(new Date(shiftsToCreate[k].datetime)); // Field trip shifts always start at 9am
     let endTime = getFormattedDate(
       new Date(shiftsToCreate[k].datetime).addHours(lengthOfTime)
     );
 
-    // console.log(`New ${shiftsToCreate[k].type} Added: ${shiftsToCreate[k].type.includes('Field Trip') ? startTimeFieldTrip : startTime} ${endTime}`)
+    console.log(`New ${shiftsToCreate[k].type} Added: ${shiftsToCreate[k].type.includes('Field Trip') ? startTimeFieldTrip : startTime} ${endTime}`)
 
     for (let m = 0; m < roleType.length; m++) {
-      // let notesString = `${shiftsToCreate[k].type.replace('+','').replace('(','').replace(')','')}, ${shiftsToCreate[k].id}`
       let newApptBody = {
         shift: {
-          start: shiftsToCreate[k].type.includes("Field Trip")
-            ? startTimeFieldTrip
-            : startTime, // If the appt is a field trip, use startTimeFieldTrip. If not, use startTime
-          // start: startTime,
+          start: shiftsToCreate[k].type.includes("Field Trip") ? startTimeFieldTrip : startTime, // If the appt is a field trip, use startTimeFieldTrip. If not, use startTime
           end: endTime,
           user_id: 0,
           role_id: roleType[m],
@@ -206,10 +205,9 @@ function createShifts(shiftsToCreate) {
           open: true,
           open_offer_type: 1,
           notes: shiftsToCreate[k].type + ", " + shiftsToCreate[k].id
-          // notes: notesString
         }
       };
-      // svnShifts.Shifts.create(SVNSHIFTS_API_KEY, newApptBody)
+      svnShifts.Shifts.create(SVNSHIFTS_API_KEY, newApptBody)
     }
   }
 }
@@ -260,28 +258,28 @@ function processData() {
     }
   }
 
-  deleteShifts(shiftData.data); // This is where shifts get deleted
+  deleteShifts(shiftDataArr); // This is where shifts get deleted
   createShifts(leftOverAppts); // This is where shifts get created
 }
 
 function isAMatch(i) {
   let ADate = new Date(apptData[i].datetime);
-  for (let j = 0; j < shiftData.data.length; j++) {
-    if (shiftData.data[j] == null) {
+  for (let j = 0; j < shiftDataArr.length; j++) {
+    if (shiftDataArr[j] == null) {
       continue;
     }
 
-    let SDate = new Date(shiftData.data[j].shift.start);
+    let SDate = new Date(shiftDataArr[j].shift.start);
     if (
-      !shiftData.data[j].shift.deleted && //If the shift is not deleted
-      shiftData.data[j].shift.notes.includes(apptData[i].id) && //If the notes include the id of appt
-      shiftData.data[j].shift.notes.includes(apptData[i].type) && //If the notes include the type of appt
-      shiftData.data[j].shift.notes.includes("Field Trip")
+      !shiftDataArr[j].shift.deleted && //If the shift is not deleted
+      shiftDataArr[j].shift.notes.includes(apptData[i].id) && //If the notes include the id of appt
+      shiftDataArr[j].shift.notes.includes(apptData[i].type) && //If the notes include the type of appt
+      shiftDataArr[j].shift.notes.includes("Field Trip")
         ? getFormattedDateFieldTrip(SDate) == getFormattedDateFieldTrip(ADate)
         : getFormattedDate(SDate) == getFormattedDate(ADate)
     ) {
       //If the times Match
-      shiftData.data[j] = null;
+      shiftDataArr[j] = null;
       return true;
     }
   }
@@ -312,42 +310,16 @@ function getFormattedDateFieldTrip(dateObj) {
   let month = "" + (dateObj.getMonth() + 1);
   let day = "" + dateObj.getDate();
   let year = "" + dateObj.getFullYear();
-  return `${year}-${month.length < 2 ? "0" + month : month}-${
-    day.length < 2 ? "0" + day : day
-  } 09:00:00`; // Field trips always start at 9:00am
+  return `${year}-${month.length < 2 ? "0" + month : month}-${day.length < 2 ? "0" + day : day} 09:00:00`; // Field trips always start at 9:00am
 }
 
 function getFormattedDateQueryParam(dateObj) {
   let month = "" + (dateObj.getMonth() + 1);
   let day = "" + (dateObj.getDate() - 1);
   let year = "" + dateObj.getFullYear();
-  return `${day.length < 2 ? "0" + day - 1 : day - 1}-${
-    month.length < 2 ? "0" + month : month
-  }-${year}`; // Field trips always start at 9:00am
-  // return `${year}-${month.length < 2 ? "0"+month:month}-${day.length < 2 ? "0"+day:day} 09:00:00`; // Field trips always start at 9:00am
+  return `${day.length < 2 ? "0" + day - 1 : day - 1}-${month.length < 2 ? "0" + month : month}-${year}`; // Field trips always start at 9:00am
 }
 
-// function findAssociatedShifts(apptData) {
-//   let ADate = new Date(apptData[i].datetime)
-//   let foundShifts = []
-//   let findAnotherAppt = true
-//   while (findAnotherAppt) {
-//     for (let j = 0; j < shiftData.data.length; j++) {
-//       if (shiftData.data[j] == null) { continue }
-
-//       let SDate = new Date(shiftData.data[j].shift.start)
-//       findAnotherAppt = false
-//       if ((!shiftData.data[j].shift.deleted) && //If the shift is not deleted
-//         shiftData.data[j].shift.notes.includes(apptData[i].id) && //If the notes include the type and id of appt
-//         SDate.getTime() == ADate.getTime()) { //If the times Match
-//         foundShifts.push(shiftData.data[j])
-//         shiftData.data[j] = null
-//         findAnotherAppt = true
-//       }
-//     }
-//   }
-//   return foundShifts
-// }
 
 app.listen(PORT, function() {
   console.log(`Listening on port ${PORT}`);
