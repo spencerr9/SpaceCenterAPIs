@@ -117,72 +117,124 @@ function createShifts(shiftsToCreate) {
 
     let lengthOfTime = 0;
 
-    switch (shiftsToCreate[k].type) {
-      case "Magellan 2.5 Hour Flight":
+    switch (true) {
+      case shiftsToCreate[k].type.includes("Magellan 2.5 Hour Flight"):
         lengthOfTime = 2.5;
         roleType[0] = roles["Magellan FD"];
         roleType[1] = roles["Supervisor"];
         roleType[2] = roles["Supervisor"];
         break;
-      case "Odyssey 2.5 Hour Flight":
+      case shiftsToCreate[k].type.includes("Odyssey 2.5 Hour Flight"):
         lengthOfTime = 2.5;
         roleType[0] = roles["Odyssey FD"];
         break;
-      case "Phoenix 2.5 Hour Flight":
+      case shiftsToCreate[k].type.includes("Phoenix 2.5 Hour Flight"):
         lengthOfTime = 2.5;
         roleType[0] = roles["Phoenix FD"];
         break;
-      case "Galileo 2.5 Hour Flight":
+      case shiftsToCreate[k].type.includes("Galileo 2.5 Hour Flight"):
         lengthOfTime = 2.5;
         roleType[0] = roles["Galileo FD"];
         break;
-      case "Magellan 5 Hour Flight":
+      case shiftsToCreate[k].type.includes("Magellan 5 Hour Flight"):
         lengthOfTime = 5;
         roleType[0] = roles["Magellan FD"];
         roleType[1] = roles["Supervisor"];
         roleType[2] = roles["Supervisor"];
         break;
-      case "Odyssey 5 Hour Flight":
+      case shiftsToCreate[k].type.includes("Odyssey 5 Hour Flight"):
         lengthOfTime = 5;
         roleType[0] = roles["Odyssey FD"];
         break;
-      case "Phoenix 5 Hour Flight":
+      case shiftsToCreate[k].type.includes("Phoenix 5 Hour Flight"):
         lengthOfTime = 5;
         roleType[0] = roles["Phoenix FD"];
         break;
-      case "Galileo 5 Hour Flight":
+      case shiftsToCreate[k].type.includes("Galileo 5 Hour Flight"):
         lengthOfTime = 5;
         roleType[0] = roles["Galileo FD"];
         break;
-      case "Class Field Trip + 4 Simulators (27-40 Students)":
-        lengthOfTime = 4.25;
-        roleType[0] = roles["Galileo FD"];
-        roleType[1] = roles["Magellan FD"];
-        roleType[2] = roles["Odyssey FD"];
-        roleType[3] = roles["Phoenix FD"];
-        roleType[4] = roles["Supervisor"];
-        roleType[5] = roles["Supervisor"];
-        roleType[6] = roles["Teacher"];
-        roleType[7] = roles["Teacher"];
+      case shiftsToCreate[k].type.includes("Class Field Trip"):
+        let filtered = shiftsToCreate.filter(obj => obj.date == shiftsToCreate[k].date)
+        console.log(filtered)
+        let timeLengthMorning = 2.25
+        let timeLengthAfternoon = 2
+        for(let x = 0; x<filtered.length; x++){
+          if(filtered[x].type.includes("Class Field Trip + 4 Simulators (27-40 Students)")){
+            x = 0 ? lengthOfTime = timeLengthMorning : lengthOfTime = timeLengthAfternoon
+            console.log("Scheduled")
+          } else if (filtered[x].type.includes("Class Field Trip + 3 Simulators (22-32 Students)")){
+            x = 0 ? lengthOfTime = timeLengthMorning : lengthOfTime = timeLengthAfternoon
+            console.log("Scheduled")
+          } else if (filtered[x].type.includes("Class Field Trip + 2 Simulators (15-25 Students)")){
+            x = 0 ? lengthOfTime = timeLengthMorning : lengthOfTime = timeLengthAfternoon
+            console.log("Scheduled")
+          }
+        }
         break;
-      case "Class Field Trip + 3 Simulators (22-32 Students)":
-        lengthOfTime = 4.25;
-        roleType[0] = roles["Magellan FD"];
-        roleType[1] = roles["Odyssey FD"];
-        roleType[2] = roles["Phoenix FD"];
-        roleType[3] = roles["Supervisor"];
-        roleType[4] = roles["Supervisor"];
-        roleType[5] = roles["Teacher"];
-        roleType[6] = roles["Teacher"];
-        break;
-      case "Class Field Trip + 2 Simulators (15-25 Students)":
-        lengthOfTime = 4.25;
-        roleType[0] = roles["Magellan FD"];
-        roleType[1] = roles["Odyssey FD"];
-        roleType[2] = roles["Supervisor"];
-        roleType[3] = roles["Supervisor"];
-        roleType[4] = roles["Teacher"];
-        break;
+        // Nested switch for morning field trips
+        // switch (true){
+        //   case filtered[0].type.includes("Class Field Trip + 4 Simulators (27-40 Students)"):
+        //     lengthOfTime = timeLengthMorning;
+        //     roleType[0] = roles["Galileo FD"];
+        //     roleType[1] = roles["Magellan FD"];
+        //     roleType[2] = roles["Odyssey FD"];
+        //     roleType[3] = roles["Phoenix FD"];
+        //     roleType[4] = roles["Supervisor"];
+        //     roleType[5] = roles["Supervisor"];
+        //     roleType[6] = roles["Teacher"];
+        //     roleType[7] = roles["Teacher"];
+        //     break;
+        //   case filtered[0].type.includes("Class Field Trip + 3 Simulators (22-32 Students)"):
+        //     lengthOfTime = timeLengthMorning;
+        //     roleType[0] = roles["Magellan FD"];
+        //     roleType[1] = roles["Odyssey FD"];
+        //     roleType[2] = roles["Phoenix FD"];
+        //     roleType[3] = roles["Supervisor"];
+        //     roleType[4] = roles["Supervisor"];
+        //     roleType[5] = roles["Teacher"];
+        //     roleType[6] = roles["Teacher"];
+        //     break;
+        //   case filtered[0].type.includes("Class Field Trip + 2 Simulators (15-25 Students)"):
+        //     lengthOfTime = timeLengthMorning;
+        //     roleType[0] = roles["Magellan FD"];
+        //     roleType[1] = roles["Odyssey FD"];
+        //     roleType[2] = roles["Supervisor"];
+        //     roleType[3] = roles["Supervisor"];
+        //     roleType[4] = roles["Teacher"];
+        //     break;
+        //   }
+        // switch (true) {
+        //   case filtered[1].type.includes("Class Field Trip + 4 Simulators (27-40 Students)"):
+        //     lengthOfTime = timeLengthAfternoon;
+        //     roleType[0] = roles["Galileo FD"];
+        //     roleType[1] = roles["Magellan FD"];
+        //     roleType[2] = roles["Odyssey FD"];
+        //     roleType[3] = roles["Phoenix FD"];
+        //     roleType[4] = roles["Supervisor"];
+        //     roleType[5] = roles["Supervisor"];
+        //     roleType[6] = roles["Teacher"];
+        //     roleType[7] = roles["Teacher"];
+        //     break;
+        //   case filtered[1].type.includes("Class Field Trip + 3 Simulators (22-32 Students)"):
+        //     lengthOfTime = timeLengthAfternoon;
+        //     roleType[0] = roles["Magellan FD"];
+        //     roleType[1] = roles["Odyssey FD"];
+        //     roleType[2] = roles["Phoenix FD"];
+        //     roleType[3] = roles["Supervisor"];
+        //     roleType[4] = roles["Supervisor"];
+        //     roleType[5] = roles["Teacher"];
+        //     roleType[6] = roles["Teacher"];
+        //     break;
+        //   case filtered[1].type.includes("Class Field Trip + 2 Simulators (15-25 Students)"):
+        //     lengthOfTime = timeLengthAfternoon;
+        //     roleType[0] = roles["Magellan FD"];
+        //     roleType[1] = roles["Odyssey FD"];
+        //     roleType[2] = roles["Supervisor"];
+        //     roleType[3] = roles["Supervisor"];
+        //     roleType[4] = roles["Teacher"];
+        //     break;
+        //   }
     }
 
     let startTime = getFormattedDate(new Date(shiftsToCreate[k].datetime));
@@ -276,7 +328,7 @@ function isAMatch(i) {
       shiftDataArr[j].shift.notes.includes(apptData[i].type) && //If the notes include the type of appt
       shiftDataArr[j].shift.notes.includes("Field Trip")
         ? getFormattedDateFieldTrip(SDate) == getFormattedDateFieldTrip(ADate)
-        : getFormattedDate(SDate) == getFormattedDate(ADate)
+        : getFormattedDate(SDate) == getFormattedDate(ADate) //If the appt type is a field trip
     ) {
       //If the times Match
       shiftDataArr[j] = null;
