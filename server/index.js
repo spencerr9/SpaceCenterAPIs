@@ -327,7 +327,6 @@ function createShifts(shiftsToCreate) {
           notes: shiftsToCreate[k].type + ", " + shiftsToCreate[k].id
         }
       };
-      console.log('hello')
       svnShifts.Shifts.create(SVNSHIFTS_API_KEY, newApptBody)
     }
     break;
