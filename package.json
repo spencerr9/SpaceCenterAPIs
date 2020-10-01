@@ -2,6 +2,7 @@
     "dependencies": {
         "7shifts": "0.0.8",
         "acuityscheduling": "^0.1.9",
+        "axios": "^0.20.0",
         "dotenv": "^8.2.0",
         "express": "^4.17.1",
         "request": "^2.88.2"

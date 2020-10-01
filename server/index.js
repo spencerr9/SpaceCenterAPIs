@@ -5,6 +5,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 var Acuity = require("acuityscheduling");
 var svnShifts = require("7shifts");
+const axios = require('axios')
+
 
 //top-level middleware
 const app = express();
@@ -56,11 +58,30 @@ let shiftDataArr = []
 
 function getSevenShiftsData(offset) {
   offset = typeof offset !== 'undefined' ? offset : 0
-  svnShifts.Shifts.list(SVNSHIFTS_API_KEY, offset)
-    .then(function(resp) {
-      shiftData = JSON.parse(resp.body)
-      console.log('totalShifts',shiftData.data.length);
-      shiftDataArr.push(shiftData.data)
+
+  function getFormattedDate(dateObj) {
+    let month = "" + (dateObj.getMonth() + 1),
+      day = "" + dateObj.getDate(),
+      year = "" + dateObj.getFullYear();
+    if (month.length < 2) month = "0" + month;
+    if (day.length < 2) day = "0" + day;
+    dateObj = [year, month, day].join("-");
+    return dateObj;
+  }
+
+
+  // Send a GET request
+  axios({
+      method: 'get',
+      url: 'https://api.7shifts.com/v1/shifts?limit=500&start[gte]='+getFormattedDate(new Date()),
+      auth: {
+        username: SVNSHIFTS_API_KEY,
+        password: ''
+      }
+    }).then(function(resp) {
+        shiftData = (resp.data)
+        console.log('totalShifts',shiftData.data.length);
+        shiftDataArr.push(shiftData.data)
     })
     .then(function(){
       shiftDataArr = [].concat.apply([],shiftDataArr)
@@ -429,6 +450,7 @@ function getFormattedDate(dateObj) {
     second = "" + dateObj.getSeconds();
   if (month.length < 2) month = "0" + month;
   if (day.length < 2) day = "0" + day;
+  if (hour.length < 2) hour = "0" + hour;
   if (minute.length < 2) minute = "0" + minute;
   if (second.length < 2) second = "0" + second;
   dateObj = [year, month, day].join("-");
