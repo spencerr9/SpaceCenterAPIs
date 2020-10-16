@@ -86,7 +86,7 @@ function getSevenShiftsData(offset) {
     .then(function(){
       shiftDataArr = [].concat.apply([],shiftDataArr)
       console.log('shiftDataArr',shiftDataArr.length)
-      if(offset < 501){
+      if(shiftDataArr.length == 500){
         console.log('offset', offset)
         // console.log(shiftDataArr)
         return getSevenShiftsData(offset + 500)
@@ -125,12 +125,8 @@ function createShifts(shiftsToCreate) {
       "Phoenix FD": 12941,
       "Mag Supervisor": 12920,
       "Teacher": 12944,
-      "Everest FD": 543420,
-      "Supervisor Everest": 548099,
-      "Valiant FD": 543421,
-      "Supervisor Valiant": 543422,
-      "Dauntless FD": 543419,
       "Cassini FD": 549618,
+      "Cas Supervisor": 549620,
       "Falcon FD": 549619
     };
     let roleType = [];
@@ -163,21 +159,6 @@ function createShifts(shiftsToCreate) {
         lengthOfTime = 2.5;
         roleType[0] = roles["Galileo FD"];
         break;
-      case shiftsToCreate[k].type.includes("Everest 2.5 Hour Flight"):
-        lengthOfTime = 2.5;
-        roleType[0] = roles["Everest FD"];
-        roleType[1] = roles["Supervisor Everest"];
-        roleType[2] = roles["Supervisor Everest"];
-        break;
-      case shiftsToCreate[k].type.includes("Valiant 2.5 Hour Flight"):
-        lengthOfTime = 2.5;
-        roleType[0] = roles["Valiant FD"];
-        roleType[1] = roles["Supervisor Valiant"];
-        break;
-      case shiftsToCreate[k].type.includes("Dauntless 2.5 Hour Flight"):
-        lengthOfTime = 2.5;
-        roleType[0] = roles["Dauntless FD"];
-        break;
       case shiftsToCreate[k].type.includes("Cassini 2.5 Hour Flight"):
         lengthOfTime = 2.5;
         roleType[0] = roles["Cassini FD"];
@@ -204,21 +185,6 @@ function createShifts(shiftsToCreate) {
         lengthOfTime = 5;
         roleType[0] = roles["Galileo FD"];
         break;
-      case shiftsToCreate[k].type.includes("Everest 5 Hour Flight"):
-        lengthOfTime = 5;
-        roleType[0] = roles["Everest FD"];
-        roleType[1] = roles["Supervisor Everest"];
-        roleType[2] = roles["Supervisor Everest"];
-        break;
-      case shiftsToCreate[k].type.includes("Valiant 5 Hour Flight"):
-        lengthOfTime = 5;
-        roleType[0] = roles["Valiant FD"];
-        roleType[1] = roles["Supervisor Valiant"];
-        break;
-      case shiftsToCreate[k].type.includes("Dauntless 5 Hour Flight"):
-        lengthOfTime = 5;
-        roleType[0] = roles["Dauntless FD"];
-        break;
       case shiftsToCreate[k].type.includes("Cassini 5 Hour Flight"):
         lengthOfTime = 5;
         roleType[0] = roles["Cassini FD"];
@@ -227,21 +193,6 @@ function createShifts(shiftsToCreate) {
       case shiftsToCreate[k].type.includes("Falcon 5 Hour Flight"):
         lengthOfTime = 5;
         roleType[0] = roles["Falcon FD"];
-        break;
-      case shiftsToCreate[k].type.includes("Everest 70 minute Junior Flight"):
-        lengthOfTime = 1.2;
-        roleType[0] = roles["Everest FD"];
-        roleType[1] = roles["Supervisor Everest"];
-        roleType[2] = roles["Supervisor Everest"];
-        break;
-      case shiftsToCreate[k].type.includes("Dauntless 70 minute Junior Flight"):
-        lengthOfTime = 1.2;
-        roleType[0] = roles["Dauntless FD"];
-        break;
-      case shiftsToCreate[k].type.includes("Valiant 70 minute Junior Flight"):
-        lengthOfTime = 1.2;
-        roleType[0] = roles["Valiant FD"];
-        roleType[1] = roles["Supervisor Valiant"];
         break;
       case shiftsToCreate[k].type.includes("Class Field Trip"):
         let filtered = shiftsToCreate.filter(obj => obj.date == shiftsToCreate[k].date)
@@ -350,7 +301,6 @@ function createShifts(shiftsToCreate) {
       };
       svnShifts.Shifts.create(SVNSHIFTS_API_KEY, newApptBody)
     }
-    break;
   }
 }
 
@@ -390,13 +340,6 @@ function processData() {
       shiftExists = isAMatch(i);
       shiftExists = isAMatch(i);
     } else if (apptData[i].type.includes("Cassini")) {
-      shiftExists = isAMatch(i);
-      shiftExists = isAMatch(i);
-    } else if (apptData[i].type.includes("Everest")) {
-      shiftExists = isAMatch(i);
-      shiftExists = isAMatch(i);
-      shiftExists = isAMatch(i);
-    } else if (apptData[i].type.includes("Valiant")) {
       shiftExists = isAMatch(i);
       shiftExists = isAMatch(i);
     } else {
