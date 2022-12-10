@@ -4,7 +4,7 @@
         "acuityscheduling": "^0.1.9",
         "axios": "^0.20.0",
         "dotenv": "^8.2.0",
-        "express": "^4.17.1",
+        "express": "^4.17.3",
         "request": "^2.88.2"
     },
     "main": "./server/index.js"
